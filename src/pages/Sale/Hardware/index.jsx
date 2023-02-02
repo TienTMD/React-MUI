@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchHardwares } from '../../api';
-import Popup from '../../components/Popup';
+import { fetchHardwares } from '../../../api';
+import Popup from '../../../components/Popup';
 import FormEdit from './FormEdit';
 import List from './List';
 import Search from './Search';

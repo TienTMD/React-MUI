@@ -11,14 +11,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { signupStaff } from '../../api';
-// import { useHandleError } from '../../hooks/useHandleError';
-// import { isEmpty } from '../../utils';
+import { useHandleError } from '../../hooks/useHandleError';
+import { isEmpty } from '../../utils';
 import { useAlert } from '../../hooks/useAlert';
 
 export default function SignUp() {
   const [formData, setFormData] = useState();
   const [loading, setLoading] = useState(false);
-  // const { handleError } = useHandleError();
+  const { handleError } = useHandleError();
   const alert = useAlert();
 
   const onChangeInput = (event) => {
@@ -26,58 +26,58 @@ export default function SignUp() {
     setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  const handleSubmit = async () => {
-    if (!loading) {
-      setLoading(true);
-      if (formData.email && formData.firstName && formData.lastName && formData.password) {
-        try {
-          await signupStaff(formData);
-          alert.success('show something');
-        } catch (error) {
-          alert.error('something went wrong');
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-        alert.error('missing inputs');
-      }
+  // const handleSubmit = async () => {
+  //   if (!loading) {
+  //     setLoading(true);
+  //     if (formData.email && formData.firstName && formData.lastName && formData.password) {
+  //       try {
+  //         await signupStaff(formData);
+  //         alert.success('show something');
+  //       } catch (error) {
+  //         alert.error('something went wrong');
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     } else {
+  //       setLoading(false);
+  //       alert.error('missing inputs');
+  //     }
+  //   }
+  // };
+
+  const validateForm = () => {
+    const { email, password } = formData;
+
+    if (isEmpty(email)) {
+      return false;
     }
+
+    if (isEmpty(password)) {
+      return false;
+    }
+
+    // check other inputs...
+
+    return true;
   };
 
-  // const validateForm = () => {
-  //   const { email, password } = formData;
+  const handleSubmit = async () => {
+    if (loading) return;
 
-  //   if (isEmpty(email)) {
-  //     return false;
-  //   }
+    setLoading(true);
 
-  //   if (isEmpty(password)) {
-  //     return false;
-  //   }
+    try {
+      if (!validateForm()) return;
 
-  //   // check other inputs...
-
-  //   return true;
-  // };
-
-  // const handleSubmit = async () => {
-  //   if (loading) return;
-
-  //   setLoading(true);
-
-  //   try {
-  //     if (!validateForm()) return;
-
-  //     signupStaff(formData);
-  //     alert.success('show something');
-  //   } catch (error) {
-  //     handleError(error);
-  //     alert.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      signupStaff(formData);
+      alert.success('show something');
+    } catch (error) {
+      handleError(error);
+      alert.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
