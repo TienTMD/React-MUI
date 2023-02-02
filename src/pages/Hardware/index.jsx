@@ -11,25 +11,18 @@ export default function HardWare() {
   const [search, changeSearch] = useState();
   const [isOpenPopupEdit, openPopupEdit] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await fetchHardwares();
-        setHardwares(data);
-      } catch {
-        // handle error...
-      }
-    })();
-  }, []);
+  const getHardwares = async (params) => {
+    try {
+      const { data } = await fetchHardwares(params);
+      setHardwares(data);
+    } catch {
+      // handle error...
+    }
+  };
 
   useEffect(() => {
     (async () => {
-      try {
-        const { data } = await fetchHardwares(search);
-        setHardwares(data);
-      } catch {
-        // handle error...
-      }
+      await getHardwares();
     })();
   }, [search]);
 

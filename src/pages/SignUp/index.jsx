@@ -26,22 +26,6 @@ export default function SignUp() {
     setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  // const validateForm = () => {
-  //   const { email, password } = formData;
-
-  //   if (isEmpty(email)) {
-  //     return false;
-  //   }
-
-  //   if (isEmpty(password)) {
-  //     return false;
-  //   }
-
-  //   // check other inputs...
-
-  //   return true;
-  // };
-
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true);
@@ -60,6 +44,22 @@ export default function SignUp() {
       }
     }
   };
+
+  // const validateForm = () => {
+  //   const { email, password } = formData;
+
+  //   if (isEmpty(email)) {
+  //     return false;
+  //   }
+
+  //   if (isEmpty(password)) {
+  //     return false;
+  //   }
+
+  //   // check other inputs...
+
+  //   return true;
+  // };
 
   // const handleSubmit = async () => {
   //   if (loading) return;
