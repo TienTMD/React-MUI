@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,11 +10,73 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { signupStaff } from '../../api';
+import { useHandleError } from '../../hooks/useHandleError';
+import { isEmpty } from '../../utils';
+import { useAlert } from '../../hooks/useAlert';
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //
+  const [formData, setFormData] = useState();
+  const [loading, setLoading] = useState(false);
+  const { handleError } = useHandleError();
+  const alert = useAlert();
+
+  const onChangeInput = (event) => {
+    // do stuff...
+    setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
+
+  // const handleSubmit = async () => {
+  //   if (!loading) {
+  //     setLoading(true);
+  //     if (formData.email && formData.firstName && formData.lastName && formData.password) {
+  //       try {
+  //         await signupStaff(formData);
+  //         alert.success('show something');
+  //       } catch (error) {
+  //         alert.error('something went wrong');
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     } else {
+  //       setLoading(false);
+  //       alert.error('missing inputs');
+  //     }
+  //   }
+  // };
+
+  const validateForm = () => {
+    const { email, password } = formData;
+
+    if (isEmpty(email)) {
+      return false;
+    }
+
+    if (isEmpty(password)) {
+      return false;
+    }
+
+    // check other inputs...
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (loading) return;
+
+    setLoading(true);
+
+    try {
+      if (!validateForm()) return;
+
+      signupStaff(formData);
+      alert.success('show something');
+    } catch (error) {
+      handleError(error);
+      alert.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,19 +103,21 @@ export default function SignUp() {
                 name="firstName"
                 required
                 fullWidth
-                id="firstName"
+                id="first-name"
                 label="First Name"
                 autoFocus
+                onChange={onChangeInput}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 required
                 fullWidth
-                id="lastName"
+                id="last-name"
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
+                onChange={onChangeInput}
               />
             </Grid>
             <Grid item xs={12}>
@@ -64,6 +128,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={onChangeInput}
               />
             </Grid>
             <Grid item xs={12}>
@@ -75,6 +140,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={onChangeInput}
               />
             </Grid>
             <Grid item xs={12}>
